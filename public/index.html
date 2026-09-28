@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111820" />
+    <meta
+      name="description"
+      content="A private local workspace for chatting with models through 9Router."
+    />
+    <title>Personal Workspace</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="/" aria-label="Personal Workspace home">
+          <span class="brand-mark" aria-hidden="true">p.</span>
+          <span class="brand-name">personal<span>workspace</span></span>
+        </a>
+
+        <nav class="primary-nav">
+          <button class="nav-link is-active" id="navDashboard" data-view="dashboard">
+            <span class="nav-icon" aria-hidden="true">▦</span>
+            <span class="nav-label">Overview</span>
+          </button>
+          <button class="nav-link" id="navChat" data-view="chat">
+            <span class="nav-icon" aria-hidden="true">✳</span>
+            <span class="nav-label">Chat</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-section">
+          <div class="section-heading">
+            <span>YOUR SPACE</span>
+            <button class="small-icon-button" id="newChatButton" aria-label="New chat">
+              +
+            </button>
+          </div>
+          <div class="thread-list" id="threadList"></div>
+          <p class="sidebar-empty" id="threadEmpty">Your conversations will appear here.</p>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="router-chip">
+            <span class="status-dot" id="sidebarStatusDot"></span>
+            <span class="router-chip-copy">
+              <strong id="sidebarStatusText">Checking 9Router</strong>
+              <small id="sidebarRouterAddress">127.0.0.1:20128</small>
+            </span>
+          </div>
+          <button class="settings-button" id="openSettings" aria-label="Connection settings">
+            <span aria-hidden="true">⚙</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="breadcrumbs">
+            <span class="breadcrumb-muted">Workspace</span>
+            <span class="breadcrumb-separator">/</span>
+            <strong id="viewTitle">Overview</strong>
+          </div>
+          <div class="topbar-right">
+            <span class="local-badge"><span></span> Local session</span>
+            <div class="avatar" aria-label="Personal workspace">PW</div>
+          </div>
+        </header>
+
+        <section class="view dashboard-view" id="dashboardView">
+          <div class="welcome-card">
+            <div class="welcome-content">
+              <span class="eyebrow">YOUR PERSONAL AI DESK</span>
+              <h1>One workspace.<br /><span>Every model.</span></h1>
+              <p>
+                A private place to think, create, and chat through your local
+                9Router connection.
+              </p>
+              <button class="primary-button" id="startChatButton">
+                Start a conversation <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="welcome-art" aria-hidden="true">
+              <div class="orbit orbit-one"></div>
+              <div class="orbit orbit-two"></div>
+              <div class="orbit orbit-three"></div>
+              <div class="orbit-core"><span>9</span></div>
+              <div class="orbit-node node-one"></div>
+              <div class="orbit-node node-two"></div>
+              <div class="orbit-node node-three"></div>
+            </div>
+            <div class="welcome-grain" aria-hidden="true"></div>
+          </div>
+
+          <div class="stat-grid">
+            <article class="stat-card">
+              <div class="stat-topline">
+                <span class="stat-icon stat-icon-green" aria-hidden="true">✳</span>
+                <span class="stat-caption">Available through 9Router</span>
+              </div>
+              <strong class="stat-value" id="modelCount">—</strong>
+              <span class="stat-label">models ready</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-topline">
+                <span class="stat-icon stat-icon-lilac" aria-hidden="true">▤</span>
+                <span class="stat-caption">Saved in this browser</span>
+              </div>
+              <strong class="stat-value" id="conversationCount">0</strong>
+              <span class="stat-label">conversations</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-topline">
+                <span class="stat-icon stat-icon-amber" aria-hidden="true">↗</span>
+                <span class="stat-caption">Since you started</span>
+              </div>
+              <strong class="stat-value" id="requestCount">0</strong>
+              <span class="stat-label">chat requests</span>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel-card connection-card">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">CONNECTION</span>
+                  <h2>Your local gateway</h2>
+                </div>
+                <span class="status-pill" id="connectionPill">
+                  <span class="status-dot"></span>
+                  <span id="connectionText">Checking</span>
+                </span>
+              </div>
+              <p class="panel-description">
+                Personal Workspace sends requests from this device to your
+                9Router instance. Your API key stays on the server.
+              </p>
+              <div class="connection-detail">
+                <span class="detail-label">API address</span>
+                <code id="routerBaseUrl">http://127.0.0.1:20128</code>
+              </div>
+              <div class="connection-detail">
+                <span class="detail-label">API key</span>
+                <span class="key-state" id="apiKeyState">Checking configuration…</span>
+              </div>
+              <button class="text-button" id="connectionSettingsButton">
+                View setup instructions <span aria-hidden="true">→</span>
+              </button>
+            </article>
+
+            <article class="panel-card quick-start-card">
+              <span class="eyebrow">QUICK START</span>
+              <h2>Pick up where you left off.</h2>
+              <p class="panel-description">
+                Start a fresh thread or jump back into a saved conversation.
+                Your history stays in this browser.
+              </p>
+              <button class="secondary-button" id="newConversationButton">
+                <span aria-hidden="true">＋</span> New conversation
+              </button>
+              <div class="privacy-note">
+                <span aria-hidden="true">◈</span>
+                <span>Chat history is stored locally on this device.</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="recent-section">
+            <div class="section-heading light-heading">
+              <div>
+                <span class="eyebrow">RECENT ACTIVITY</span>
+                <h2>Recent conversations</h2>
+              </div>
+              <button class="text-button" id="viewAllChatsButton">
+                View all <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="recent-list" id="recentList"></div>
+            <div class="recent-empty" id="recentEmpty">
+              <span class="empty-mark" aria-hidden="true">✳</span>
+              <span>No conversations yet. Start one when you’re ready.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="view chat-view is-hidden" id="chatView">
+          <div class="chat-topline">
+            <div>
+              <span class="eyebrow">PERSONAL WORKSPACE</span>
+              <h1 id="activeThreadTitle">New conversation</h1>
+            </div>
+            <label class="model-picker">
+              <span>MODEL</span>
+              <input
+                id="modelInput"
+                list="modelOptions"
+                autocomplete="off"
+                placeholder="Search available models"
+                aria-label="Choose a 9Router model"
+              />
+              <datalist id="modelOptions"></datalist>
+            </label>
+          </div>
+
+          <div class="chat-scroll-area" id="chatScrollArea">
+            <div class="chat-empty-state" id="chatEmptyState">
+              <div class="chat-empty-symbol" aria-hidden="true">✳</div>
+              <span class="eyebrow">A FRESH PAGE</span>
+              <h2>What would you like to work on?</h2>
+              <p>Choose a model, type a prompt, and your conversation begins here.</p>
+              <div class="prompt-suggestions">
+                <button class="suggestion-chip" data-prompt="Help me plan my day.">
+                  Help me plan my day
+                </button>
+                <button class="suggestion-chip" data-prompt="Explain a concept clearly and give me an example.">
+                  Explain a concept
+                </button>
+                <button class="suggestion-chip" data-prompt="Help me write or improve a piece of code.">
+                  Work on some code
+                </button>
+              </div>
+            </div>
+            <div class="message-list" id="messageList" aria-live="polite"></div>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="composer">
+              <textarea
+                id="messageInput"
+                rows="1"
+                placeholder="Message your workspace…"
+                aria-label="Message your workspace"
+              ></textarea>
+              <div class="composer-bottom">
+                <span class="composer-hint">
+                  <span aria-hidden="true">↵</span> Enter to send · Shift + Enter for a new line
+                </span>
+                <button class="send-button" id="sendButton" aria-label="Send message">
+                  <span>Send</span><span aria-hidden="true">↑</span>
+                </button>
+              </div>
+            </div>
+            <p class="composer-footnote">
+              Responses are generated by the model you select through 9Router.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="settings-dialog" id="settingsDialog">
+      <form method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <span class="eyebrow">LOCAL SETUP</span>
+            <h2>Connect 9Router</h2>
+          </div>
+          <button class="close-button" aria-label="Close settings">×</button>
+        </div>
+        <p>
+          The web app talks to 9Router through this local server. Keep your key
+          in the project’s ignored <code>.env</code> file; it is never sent to
+          the browser.
+        </p>
+        <div class="setup-code">
+          <span>ROUTER_BASE_URL=http://127.0.0.1:20128</span>
+          <span>ROUTER_API_KEY=your-9router-key</span>
+        </div>
+        <ol class="setup-steps">
+          <li>Copy <code>.env.example</code> to <code>.env</code>.</li>
+          <li>Set <code>ROUTER_API_KEY</code> to the key configured in 9Router.</li>
+          <li>Restart Personal Workspace after changing the file.</li>
+        </ol>
+        <div class="dialog-footer">
+          <span class="privacy-note"><span aria-hidden="true">◈</span> Never commit <code>.env</code>.</span>
+          <button class="primary-button dialog-done">Done</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
