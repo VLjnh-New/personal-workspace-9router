@@ -1,0 +1,14 @@
+{
+  "name": "personal-workspace-9router",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A Termux-ready personal chat workspace and dashboard for 9Router.",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
